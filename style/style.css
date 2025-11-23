@@ -1,0 +1,604 @@
+/* ==========================================================================
+   WaveShape — style.css (улучшенная версия)
+   Основа: оригинальный файл пользователя + мобильное меню, адаптив, улучшения
+   ========================================================================== */
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px; /* чуть больше чем высота header */
+}
+
+/* --- RESET --- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: #0b0d10;
+  color: #e7edf6;
+  overflow-x: hidden;
+  transition: background .3s, color .3s;
+}
+
+html[data-theme='light'] body {
+  background: #f6f7fb;
+  color: #0b0d10;
+}
+
+/* --- NEON COLOR PALETTE & VARIABLES --- */
+:root {
+  --header-h: 78px;
+  --sidebar-w: 64px;
+
+  --accent: #4da3ff;
+  --accent2: #0088ff;
+  --panel: #0b0f18;
+  --panel-glow: 0 0 22px rgba(0,120,255,.25);
+  --neon: #2b8cff;
+  --neon2: #0077ff;
+
+  --muted: #9aa4b2;
+  --glass: rgba(255,255,255,0.02);
+  --glass-strong: rgba(255,255,255,0.06);
+}
+
+/* --- THEME SWITCH (ROBUST VERSION: absolute dot + left-based motion + bounce+glow) --- */
+
+/* header-right остаётся как есть, добавлено overflow для безопасности */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Контейнер переключателя */
+.theme-toggle {
+  width: 52px;
+  height: 28px;
+  border-radius: 22px;
+  background: #222;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 4px;                    /* чуть больше, чтобы dot помещалась */
+  overflow: hidden;                /* предотвращает выход dot за границы */
+  transition:
+    background .35s ease,
+    box-shadow .35s ease,
+    transform .25s cubic-bezier(.32, 1.2, .55, 1);
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.45);
+}
+
+/* Hover: лёгкий подъём и glow */
+.theme-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 18px rgba(77,163,255,0.45),
+    inset 0 0 8px rgba(0,0,0,0.45);
+}
+
+/* Dot — теперь абсолютная, двигается через left (не через translateX) */
+.theme-dot {
+  position: absolute;
+  left: 4px;                       /* начальная позиция (внутри padding) */
+  top: 50%;
+  transform: translateY(-50%) scale(1);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff, #bbb);
+  z-index: 3;
+  box-shadow: 0 0 8px rgba(255,255,255,0.35);
+  transition:
+    left .45s cubic-bezier(.22,1,.36,1),
+    transform .45s cubic-bezier(.32, 1.25, .55, 1),
+    width .35s ease,
+    height .35s ease,
+    box-shadow .35s ease;
+}
+
+/* Hover: dot немного увеличивается */
+.theme-toggle:hover .theme-dot {
+  transform: translateY(-50%) scale(1.06);
+  box-shadow: 0 0 12px rgba(255,255,255,0.45);
+}
+
+/* Emojis — слой над dot */
+.theme-toggle span {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  pointer-events: none;
+  user-select: none;
+  z-index: 5;                       /* выше, чтобы не перекрываться */
+  transition: opacity .28s ease;
+}
+
+/* LIGHT THEME — dot переезжает по left, а не через translateX.
+   Также добавляем bounce-анимацию и glow для живости. */
+html[data-theme="light"] .theme-toggle {
+  background: linear-gradient(135deg, #e8ecf6, #d9dfea);
+  border: 1px solid rgba(0,0,0,0.12);
+  box-shadow:
+    inset 0 0 6px rgba(0,0,0,0.12),
+    0 0 12px rgba(0,120,255,0.18);
+}
+
+/* dot перемещается вправо до 100% - padding - dotWidth (расчётно 4px + 22px => 26px) */
+html[data-theme="light"] .theme-dot {
+  left: calc(100% - 26px);
+  transform: translateY(-50%) scale(1.12);
+  background: radial-gradient(circle at 30% 30%, #222, #000);
+  box-shadow: 0 0 12px rgba(0,120,255,0.25);
+  animation: theme-bounce .48s cubic-bezier(.34,1.8,.54,1) 1;
+}
+
+/* Focus ring */
+.theme-toggle:focus {
+  outline: 2px solid rgba(77,163,255,0.35);
+  outline-offset: 3px;
+}
+
+/* Bounce keyframes (легкий отскок при переключении) */
+@keyframes theme-bounce {
+  0%   { transform: translateY(-50%) translateX(0) scale(1); }
+  40%  { transform: translateY(-55%) translateX(0) scale(1.18); }
+  70%  { transform: translateY(-48%) translateX(0) scale(1.03); }
+  100% { transform: translateY(-50%) translateX(0) scale(1.12); }
+}
+
+
+/* --- HEADER --- */
+.header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 26px;
+  background: var(--glass);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+}
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Logo */
+.logo {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Navigation (desktop) */
+.header-nav {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+
+  /* initial animated state for smoother show/hide */
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity .25s ease, transform .25s ease;
+  z-index: 1200;
+}
+.header-nav a {
+  color: var(--muted);
+  padding: 10px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: color .25s, background .25s, transform .15s;
+  font-weight: 600;
+}
+.header-nav a:hover,
+.header-nav a.active {
+  color: var(--accent);
+  background: rgba(77,163,255,0.12);
+}
+
+/* --- MOBILE NAV TOGGLE (HAMBURGER) --- */
+.mobile-nav-toggle {
+  display: none; /* becomes visible via media query */
+  background: none;
+  border: none;
+  font-size: 1.9rem;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 10px;
+  transition: color .25s, background .25s;
+}
+.mobile-nav-toggle:hover {
+  color: var(--accent);
+  background: rgba(77,163,255,0.08);
+}
+.mobile-nav-toggle:focus { outline: 2px solid rgba(77,163,255,0.2); }
+
+/* --- SIDEBAR (kept but hidden by default in this layout) --- */
+.sidebar {
+  position: fixed;
+  left: 0; top: 0;
+  width: var(--sidebar-w);
+  height: 100%;
+  background: rgba(255,255,255,0.015);
+  backdrop-filter: blur(6px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 14px;
+  z-index: 1100;
+}
+.icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  display:flex;align-items:center;justify-content:center;
+  color: var(--muted); font-size: 20px;
+  margin: 7px 0; cursor: pointer;
+  transition: transform .25s, box-shadow .4s, color .25s;
+}
+.icon:hover {
+  color: var(--accent);
+  box-shadow: 0 0 16px rgba(0,120,255,.45);
+  transform: translateY(-4px) scale(1.1);
+}
+.icon.active {
+  color: var(--accent);
+  box-shadow: 0 8px 24px rgba(77,163,255,0.2);
+}
+
+/* --- PARALLAX NEON BLOBS --- */
+.parallax { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+.parallax div { position: absolute; border-radius: 50%; filter: blur(60px); opacity: .18; }
+.l1 { width: 520px; height: 520px; background: #0b3a8f; box-shadow: 0 0 120px #0a4cff; left: -100px; top: 20%; }
+.l2 { width: 440px; height: 440px; background: #0066ff; box-shadow: 0 0 160px #0066ff; right: -120px; top: 55%; }
+.l3 { width: 760px; height: 760px; background: #1a5bff; opacity: .12; box-shadow: 0 0 200px #1a5bff; left: 10%; bottom: -40%; }
+
+/* --- MAIN LAYOUT --- */
+.main { margin-left: 0; padding-top: var(--header-h); }
+section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+/* --- NEON CARD --- */
+.card {
+  width: 100%; max-width: 1150px;
+  background: linear-gradient(135deg,#0d111a,#0a0d14);
+  padding: 60px;
+  border-radius: 18px;
+  border: 1px solid rgba(0,140,255,0.18);
+  box-shadow:
+    0 12px 40px rgba(0,0,0,0.45),
+    0 0 30px rgba(0,100,255,0.12);
+  transition: transform .45s, box-shadow .45s;
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 18px 60px rgba(0,0,0,0.55),
+    0 0 40px rgba(0,120,255,0.22);
+}
+
+/* --- TEXT ELEMENTS --- */
+.title {
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(90deg,#4da3ff,#0088ff,#4da3ff);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: waveGradient 6s ease infinite;
+}
+@keyframes waveGradient {
+  0% { background-position: 0%; }
+  50% { background-position: 100%; }
+  100% { background-position: 0%; }
+}
+
+.subtitle { margin-top: 12px; color: var(--muted); font-size: 1.2rem; }
+
+/* --- BUTTON (NEON WAVE EFFECT) --- */
+.btn {
+  margin-top: 26px;
+  display: inline-block;
+  padding: 16px 30px;
+  border-radius: 14px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(90deg,var(--accent),var(--accent2));
+  color: #04131c;
+  text-decoration: none;
+  transition: transform .35s, box-shadow .35s;
+  box-shadow: 0 0 18px rgba(0,120,255,.35);
+}
+.btn:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 0 28px rgba(0,120,255,.55);
+}
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.26), transparent 60%);
+  transform: scale(0);
+  opacity: 0;
+  transition: transform .45s, opacity .45s;
+}
+.btn:hover::before { transform: scale(2.5); opacity: 1; }
+
+/* --- FADE-IN / STAGGER ANIMATIONS --- */
+.fade { opacity: 0; transform: translateY(40px); filter: blur(4px); transition: opacity 1s, transform 1s, filter 1s; }
+.fade.in { opacity: 1; transform: none; filter: blur(0); }
+
+[data-stagger] > * { opacity: 0; transform: translateY(20px); filter: blur(4px); }
+[data-stagger].in > * { opacity: 1; transform: none; filter: blur(0); transition: .7s; }
+[data-stagger].in > *:nth-child(2) { transition-delay: .08s; }
+[data-stagger].in > *:nth-child(3) { transition-delay: .16s; }
+
+/* --- FONT IMPORT (monospace for docs) --- */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&display=swap');
+
+/* --- PRIVACY BLOCK STYLE --- */
+#privacy .card {
+  font-family: "JetBrains Mono", monospace;
+  line-height: 1.6;
+  padding: 70px;
+}
+#privacy .title {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 700;
+}
+#privacy h2 {
+  font-size: 1.6rem;
+  margin-top: 34px;
+  margin-bottom: 12px;
+  font-weight: 700;
+  color: #4da3ff;
+}
+#privacy li {
+  list-style: disc;
+  margin-left: 20px;
+  margin-bottom: 14px;
+  font-size: 1.05rem;
+  color: #e7edf6;
+}
+
+/* --- TERMS BLOCK STYLE --- */
+#terms .card {
+  font-family: "JetBrains Mono", monospace;
+  line-height: 1.6;
+  padding: 70px;
+}
+#terms .title { font-family: "JetBrains Mono", monospace; font-weight: 700; }
+#terms h2 {
+  font-size: 1.6rem;
+  margin-top: 34px;
+  margin-bottom: 12px;
+  font-weight: 700;
+  color: #4da3ff;
+}
+#terms h3 {
+  font-size: 1.35rem;
+  margin-top: 28px;
+  margin-bottom: 10px;
+  font-weight: 700;
+  color: #79b8ff;
+}
+#terms h4 {
+  font-size: 1.1rem;
+  margin-top: 8px;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #a8cfff;
+}
+#terms li {
+  list-style: disc;
+  margin-left: 20px;
+  margin-bottom: 14px;
+  font-size: 1.05rem;
+  color: #e7edf6;
+}
+#terms p { margin-bottom: 14px; font-size: 1.05rem; }
+
+/* --- COMMANDS BLOCK STYLE --- */
+#commands .card { font-family: "JetBrains Mono", monospace; line-height: 1.6; padding: 70px; }
+#commands .title { font-family: "JetBrains Mono", monospace; font-weight: 700; }
+#commands h3 {
+  font-size: 1.35rem;
+  margin-top: 28px;
+  margin-bottom: 10px;
+  font-weight: 700;
+  color: #79b8ff;
+}
+#commands li {
+  list-style: disc;
+  margin-left: 20px;
+  margin-bottom: 14px;
+  font-size: 1.05rem;
+  color: #e7edf6;
+}
+
+/* --- WAVESHAPE INTRO BLOCK STYLE --- */
+#home .card, .card[data-stagger] { font-family: "JetBrains Mono", monospace; line-height: 1.6; }
+#home .subtitle, .subtitle {
+  margin-top: 12px;
+  font-size: 1.2rem;
+  color: var(--muted);
+  max-width: 700px;
+}
+
+/* --- FEATURES LIST --- */
+.features { margin-top: 26px; margin-bottom: 26px; }
+.features li {
+  list-style: disc;
+  margin-left: 20px;
+  margin-bottom: 10px;
+  font-size: 1.05rem;
+  color: #e7edf6;
+}
+
+/* --- LIGHT THEME ADJUSTMENTS --- */
+html[data-theme="light"] .card {
+  background: linear-gradient(135deg, #ffffff, #f3f6fa) !important;
+  border: 1px solid rgba(0,120,255,0.15);
+  box-shadow:
+    0 12px 40px rgba(0,0,0,0.08),
+    0 0 30px rgba(0,120,255,0.08);
+}
+html[data-theme="light"] #privacy li,
+html[data-theme="light"] #terms li,
+html[data-theme="light"] #commands li,
+html[data-theme="light"] .features li {
+  color: #222 !important;
+}
+html[data-theme="light"] #privacy h2,
+html[data-theme="light"] #terms h2,
+html[data-theme="light"] #commands h2 {
+  color: #0066cc !important;
+}
+
+/* --- SKIP LINK (accessibility) --- */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.skip-link:focus {
+  position: static;
+  left: auto;
+  width: auto;
+  height: auto;
+  padding: 8px 12px;
+  background: rgba(77,163,255,0.12);
+  border-radius: 6px;
+  margin: 6px;
+  z-index: 2000;
+}
+
+/* --- MOBILE / RESPONSIVE --- */
+/* breakpoint chosen: 760px (как ты указал) */
+@media (max-width: 760px) {
+
+  /* header adjustments */
+  .header { left: 0; padding: 0 16px; }
+  .header-nav { display: none; } /* hidden by default on mobile */
+  .mobile-nav-toggle { display: inline-flex; }
+
+  /* mobile nav panel (dropdown under header) */
+  .header-nav {
+    position: absolute;
+    top: var(--header-h);
+    right: 0;
+    left: 0;
+    display: none; /* controlled via .open class */
+    flex-direction: column;
+    gap: 0;
+    background: rgba(10,12,18,0.98);
+    backdrop-filter: blur(10px);
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(0,120,255,0.12);
+    z-index: 1150;
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+
+  .header-nav a {
+    padding: 14px 22px;
+    font-size: 1.05rem;
+    border-radius: 0;
+    display: block;
+    width: 100%;
+  }
+
+  /* open state toggled by JS */
+  .header-nav.open {
+    display: flex !important;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* page layout tweaks */
+  .main { margin-left: 0; }
+  .card { padding: 32px; }
+  .title { font-size: 2.2rem; }
+
+  /* smaller screens */
+  @media (max-width: 540px) {
+    .card { padding: 24px !important; }
+    .title { font-size: 1.8rem !important; }
+    .subtitle { font-size: 1.05rem; }
+  }
+}
+
+/* --- SMALL CLEANUPS / OVERRIDES --- */
+/* ensure sidebar hidden in responsive contexts if forced */
+.sidebar { display: none !important; }
+
+/* accessibility focus styles for links and buttons */
+a:focus, button:focus {
+  outline: 2px solid rgba(77,163,255,0.18);
+  outline-offset: 2px;
+}
+
+/* ЛОГО — аккуратно справа внутри карточки */
+.bot-logo {
+  position: absolute;
+  top: 25px;
+  right: 25px; /* было -20px — из-за этого лого вылазило */
+
+  width: 120px;
+  height: auto;
+
+  opacity: 0.95;
+  pointer-events: none;
+
+  transition: transform 0.3s ease;
+}
+
+.card {
+  position: relative;
+}
+
+.card:hover .bot-logo {
+  transform: scale(1.04);
+}
+
+/* 📱 Адаптация под телефоны */
+@media (max-width: 768px) {
+  .bot-logo {
+    position: static;
+    display: block;
+    margin: 0 auto 20px auto;
+
+    width: 110px;
+    transform: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .bot-logo {
+    width: 90px;
+  }
+}
+
+
+
+/* end of stylesheet */

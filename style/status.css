@@ -1,0 +1,167 @@
+/* --- STATUS LAYOUT --- */
+
+.monitor-box {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  margin-top: 22px;
+}
+
+/* ----- TOP GRID: mini monitors ----- */
+/* CPU, RAM, Disk → всегда 3 в ряд на ПК */
+
+.monitor-cards.top-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+/* mini card (CPU/RAM/Disk) */
+.mcard {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 12px;
+
+  background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.03));
+  border: 1px solid rgba(77,163,255,0.06);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.4);
+
+  transition: transform .28s, box-shadow .28s;
+}
+
+.mcard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 38px rgba(0,0,0,0.55), 0 0 28px rgba(77,163,255,0.08);
+}
+
+/* text inside card */
+.mcard-head {
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 0.95rem;
+}
+
+/* FIXED: переносим всё в колонку */
+.mcard-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+/* mini card numbers */
+.mval {
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: #eaf6ff;
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #bfe6ff22, transparent);
+}
+
+/* mini canvas graph (только для CPU/RAM/Disk) */
+.mini {
+  width: 150px;
+  height: 48px;
+  border-radius: 8px;
+}
+
+/* скрываем графики у Users/Guilds */
+.mcard.no-graph .mini {
+  display: none !important;
+}
+
+/* ----- BIG MONITOR (bottom) ----- */
+
+.monitor-graph {
+  background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
+  border-radius: 14px;
+  padding: 14px;
+  border: 1px solid rgba(77,163,255,0.06);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.45), var(--panel-glow);
+}
+
+.monitor-graph canvas {
+  width: 100% !important;
+  height: 320px !important;
+  display: block;
+  border-radius: 10px;
+}
+
+/* ----- RESPONSIVE ADAPTATION ----- */
+
+/* tablets */
+@media (max-width: 960px) {
+  .monitor-cards.top-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .monitor-graph canvas {
+    height: 260px !important;
+  }
+}
+
+/* phones */
+@media (max-width: 600px) {
+  .monitor-cards.top-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mini {
+    width: 100%;
+  }
+
+  .monitor-graph canvas {
+    height: 220px !important;
+  }
+}
+
+/* tiny phones */
+@media (max-width: 400px) {
+  .mval {
+    font-size: 1.25rem;
+  }
+}
+
+/* fade-in animation */
+[data-stagger] > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+
+[data-stagger].in > * {
+  opacity: 1;
+  transform: none;
+}
+
+/* highlight peak */
+.mcard.peak {
+  box-shadow: 0 10px 30px rgba(77,163,255,0.16), 0 0 22px rgba(77,163,255,0.08);
+}
+
+/* UpTIme */
+.uptime-card {
+  margin-top: 10px;
+}
+
+/* Commands */
+.commands-card .mcard-body.row {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.commands-card .mval.small {
+  font-size: 1.2rem;
+  background: transparent;
+  padding: 2px 4px;
+  opacity: 0.9;
+}
+
+.commands-card {
+  margin-top: 10px;
+}
