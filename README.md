@@ -1,14 +1,11 @@
 
 <div align="center">
 
-<img src="https://dummyimage.com/600x180/0d1117/4da3ff&text=WaveShape+Music+Bot" width="100%">
-
 # 🎵 WaveShape — музыкальный Discord-бот + современная веб-панель
 Лёгкий, мощный и стильный музыкальный бот с web-dashboard нового поколения.
 
 ---
 
-### 🚀 Badges
 
 ![version](https://img.shields.io/badge/Version-v0.9%20Beta-4da3ff?style=for-the-badge)
 ![license](https://img.shields.io/badge/License-Proprietary-blue?style=for-the-badge)
@@ -17,20 +14,6 @@
 ![frontend](https://img.shields.io/badge/Frontend-HTML%20%7C%20CSS%20%7C%20JS-ffb300?style=for-the-badge)
 
 </div>
-
----
-
-# 📸 Превью сайта
-
-> ✨ *Превью являются временными заглушками, пока не будут загружены реальные изображения.*
-
-<div align="center">
-  <img src="https://dummyimage.com/900x500/11161c/4da3ff&text=Home+Page+Preview" width="90%" />
-  <br><br>
-  <img src="https://dummyimage.com/900x500/11161c/4da3ff&text=Profile+Page+Preview" width="90%" />
-</div>
-
----
 
 # 🌟 О проекте
 
