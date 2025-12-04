@@ -7,12 +7,10 @@
   <meta name="description" content="WaveShape — мощный музыкальный Discord-бот. Высокое качество, удобные команды и стабильность работы." />
   <title>💙 WaveShape — лучший музыкальный бот</title>
 
-  <!-- Используем загруженный CSS (файл, который вы прислали) -->
   <link rel="stylesheet" href="./style/style.css" />
   <link rel="stylesheet" href="./style/status.css" />
 </head>
 <body>
-  <!-- skip link для клавиатурной навигации -->
   <a class="skip-link" href="#main-content" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">
     Перейти к содержимому
   </a>
@@ -26,10 +24,8 @@
 
   <header class="header" role="banner">
     <div class="header-left" style="display:flex;align-items:center;gap:18px;">
-      <!-- Логотип -->
       <a class="logo" href="#home" aria-label="WaveShape — на главную">WaveShape</a>
 
-      <!-- мобильный toggle меню -->
       <button id="mobileNavToggle" class="mobile-nav-toggle" aria-expanded="false" aria-controls="primary-navigation" aria-label="Открыть меню" style="display:none;">
         ☰
       </button>
@@ -52,11 +48,9 @@
   </header>
   <main id="main-content" class="main" role="main">
 
-<!-- HOME -->
     <section id="home" aria-labelledby="home-title">
       <div class="card" data-stagger>
         
-        <!-- ЛОГО -->
         <img src="./assets/logo/logo.png" alt="WaveShape Logo" class="bot-logo" />
 
         <h1 id="home-title" class="title">🎵 WaveShape</h1>
@@ -78,7 +72,6 @@
     </section>
 
 
-    <!-- COMMANDS -->
     <section id="commands" aria-labelledby="commands-title">
       <div class="card" data-stagger>
         <h2 id="commands-title" class="title">📜 Команды</h2>
@@ -101,17 +94,14 @@
       </div>
     </section>
 
-    <!-- STATUS -->
     <section id="status">
       <div class="card" data-stagger>
         <h2 class="title">🔗 Статус</h2>
 
         <div class="monitor-box">
 
-          <!-- TOP: 3 mini monitors -->
           <div class="monitor-cards top-grid">
 
-            <!-- CPU -->
             <div class="mcard">
               <div class="mcard-head">🖥️ CPU •</div>
               <div class="mcard-body column">
@@ -120,7 +110,6 @@
               </div>
             </div>
 
-            <!-- RAM -->
             <div class="mcard">
               <div class="mcard-head">📟 RAM •</div>
               <div class="mcard-body column">
@@ -129,7 +118,6 @@
               </div>
             </div>
 
-            <!-- Disk -->
             <div class="mcard">
               <div class="mcard-head">💽 Disk •</div>
               <div class="mcard-body column">
@@ -138,7 +126,6 @@
               </div>
             </div>
 
-            <!-- Users -->
             <div class="mcard no-graph">
               <div class="mcard-head">👥 Users •</div>
               <div class="mcard-body column">
@@ -146,7 +133,6 @@
               </div>
             </div>
 
-            <!-- Guilds -->
             <div class="mcard no-graph">
               <div class="mcard-head">🌐 Guilds •</div>
               <div class="mcard-body column">
@@ -154,7 +140,6 @@
               </div>
             </div>
 
-            <!-- Commands -->
             <div class="mcard no-graph commands-card">
               <div class="mcard-head">⌨️ Commands •</div>
 
@@ -167,7 +152,6 @@
 
           </div>
 
-          <!-- BOTTOM: uptime mini card -->
           <div class="mcard no-graph uptime-card">
             <div class="mcard-head">⏳ Uptime •</div>
             <div class="mcard-body column">
@@ -175,7 +159,6 @@
             </div>
           </div>
 
-          <!-- BOTTOM: big CPU+RAM monitor -->
           <div class="monitor-graph">
             <canvas id="monitorChart"></canvas>
           </div>
@@ -185,7 +168,6 @@
     </section>
 
 
-    <!-- TERMS -->
     <section id="terms" aria-labelledby="terms-title">
       <div class="card" data-stagger>
         <h2 id="terms-title" class="title">📍 Условия</h2>
@@ -243,7 +225,6 @@
       </div>
     </section>
 
-    <!-- PRIVACY -->
     <section id="privacy" aria-labelledby="privacy-title">
       <div class="card" data-stagger>
         <h2 id="privacy-title" class="title">🔒 Конфиденциальность</h2>
@@ -295,11 +276,9 @@
     </section>
   </main>
 
-  <!-- JS -->
   <script src="./Java/script.js" defer></script>
   <script src="./Java/monitor.js" defer></script>
 
-  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html>
